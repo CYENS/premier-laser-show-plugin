@@ -59,6 +59,11 @@ void UReembodiedMachineOscHandler::InitializeOsc()
     FOSCDispatchMessageEventBP LaserEvent;
     LaserEvent.BindDynamic(this, &UReembodiedMachineOscHandler::HandleLaserLines);
     OscServer->BindEventToOnOSCAddressPatternMatchesPath(LaserPattern, LaserEvent);
+    
+    const FOSCAddress LightJointAssociatePattern = UOSCManager::ConvertStringToOSCAddress(TEXT("/light/joint/associate"));
+    FOSCDispatchMessageEventBP LightJointAssociateEvent;
+    LightJointAssociateEvent.BindDynamic(this, &UReembodiedMachineOscHandler::HandleLightJointAssociate);
+    OscServer->BindEventToOnOSCAddressPatternMatchesPath(LightJointAssociatePattern, LightJointAssociateEvent);
 }
 
 void UReembodiedMachineOscHandler::ShutdownOsc()
@@ -153,4 +158,16 @@ void UReembodiedMachineOscHandler::HandleLaserLines(const FOSCAddress& AddressPa
         LaserLines.Add(Line);
     }
     OnLaserLinesReceived.Broadcast(LaserLines);
+}
+
+void UReembodiedMachineOscHandler::HandleLightJointAssociate(
+    const FOSCAddress& AddressPattern,
+    const FOSCMessage& Message,
+    const FString& SenderIP,
+    int32 SenderPort
+)
+{
+    TArray<int> Values;
+    UOSCManager::GetAllInt32s(Message, Values);
+    OnLightJointAssociationReceived.Broadcast(Values);
 }

@@ -16,6 +16,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnLightPansReceived, const TArray<F
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnLightTiltsReceived, const TArray<FVector2f>&, TiltValues);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnLightOffsetReceived, const TArray<FVector2f>&, Offsets);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnLaserLinesReceived, const TArray<FVector4f>&, LineData);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnLightJointAssociationReceived, const TArray<int>&, LightJointAssociation);
 
 UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
 class PREMIERELASERSHOW_API UReembodiedMachineOscHandler : public UActorComponent
@@ -64,6 +65,9 @@ public:
 
     UPROPERTY(BlueprintAssignable, Category="OSC Events")
     FOnLaserLinesReceived OnLaserLinesReceived;
+    
+    UPROPERTY(BlueprintAssignable, Category="OSC Events")
+    FOnLightJointAssociationReceived OnLightJointAssociationReceived;
 
 protected:
     void InitializeOsc();
@@ -87,4 +91,7 @@ protected:
 
     UFUNCTION()
     void HandleLaserLines(const FOSCAddress& AddressPattern, const FOSCMessage& Message, const FString& SenderIP, int32 SenderPort);
+    
+    UFUNCTION()
+    void HandleLightJointAssociate(const FOSCAddress& AddressPattern, const FOSCMessage& Message, const FString& SenderIP, int32 SenderPort);
 };

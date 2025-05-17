@@ -29,10 +29,10 @@ public:
     virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
 
     /** OSC connections **/
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Connections")
+    UPROPERTY(BlueprintReadWrite, Category="Connections")
     UOSCServer* OscServer;
 
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Connections")
+    UPROPERTY(BlueprintReadWrite, Category="Connections")
     UOSCClient* OscClient;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Connections")

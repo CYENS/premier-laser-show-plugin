@@ -60,7 +60,7 @@ Lights follow motion-capture joints, then enter wobbling behavior.
 
 - **Apply Light Offset**
     ```bash
-    /light/offset <x0> <y0> <z0> … <x15> <y15> <z15>
+    /light/offset <x0> <y0> … <x15> <y15>
     ```
 	Apply an offset for each joint ( so if  light 0 looks at joint 0, then add x0, y0 ). 
 	This is for the wobbling behavior where lights don't strictly follow the joints but get some autonomy. In the first phase offset is 0 for all lights.

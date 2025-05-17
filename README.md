@@ -7,18 +7,18 @@ git submodule add https://github.com/CYENS/premier-laser-show-plugin.git Plugins
 A quick reference for Open Sound Control (OSC) messages driving the performance.
 
   * [Scene 1: Light Painting](#scene-1-light-painting)
-    + [Phase 1: Setup](#phase-1--setup)
-  * [Scene 2: Monster](#scene-2--monster)
-    + [Phase 1: Monster Cue](#phase-1--monster-cue)
-    + [Phase 2: Monster Appearance](#phase-2--monster-appearance)
-  * [Scene 3: Light Solo](#scene-3--light-solo)
-  * [Scene 4: Approximation](#scene-4--approximation)
-  * [Scene 5: Light Forest](#scene-5--light-forest)
-  * [Scene 6: The Mound](#scene-6--the-mound)
-  * [Scene 7: Qualities](#scene-7--qualities)
-  * [Scene 8: Puppet](#scene-8--puppet)
-  * [Scene 9: Labyrinth](#scene-9--labyrinth)
-  * [Scene 10: Laser Swarm](#scene-10--laser-swarm)
+    + [Phase 1: Setup](#phase-1-setup)
+  * [Scene 2: Monster](#scene-2-monster)
+    + [Phase 1: Monster Cue](#phase-1-monster-cue)
+    + [Phase 2: Monster Appearance](#phase-2-monster-appearance)
+  * [Scene 3: Light Solo](#scene-3-light-solo)
+  * [Scene 4: Approximation](#scene-4-approximation)
+  * [Scene 5: Light Forest](#scene-5-light-forest)
+  * [Scene 6: The Mound](#scene-6-the-mound)
+  * [Scene 7: Qualities](#scene-7-qualities)
+  * [Scene 8: Puppet](#scene-8-puppet)
+  * [Scene 9: Labyrinth](#scene-9-labyrinth)
+  * [Scene 10: Laser Swarm](#scene-10-laser-swarm)
 
 ---
 
@@ -26,7 +26,7 @@ A quick reference for Open Sound Control (OSC) messages driving the performance.
 
 Lights follow motion-capture joints, then enter wobbling behavior.
 
-### Phase 1: Setup
+### Phase 1 Setup
 
 - **Start Scene**
     ```bash
@@ -77,11 +77,11 @@ Lights follow motion-capture joints, then enter wobbling behavior.
 
 ---
 
-## Scene 2: Monster
+## Scene 2 Monster
 
 Laser color syncs with lights; pan/tilt then laser lines draw.
 
-### Phase 1: Monster Cue
+### Phase 1 Monster Cue
 
 - **Start Phase**
     
@@ -105,7 +105,7 @@ Laser color syncs with lights; pan/tilt then laser lines draw.
     
     _Example:_ `/light/tilt 15.0 3.0 2.0 65.0 ... 75.0 2.0
 
-### Phase 2: Monster Appearance
+### Phase 2 Monster Appearance
 
 - **Show Appearance**
     ```bash
@@ -130,7 +130,7 @@ Laser color syncs with lights; pan/tilt then laser lines draw.
 
 ---
 
-## Scene 3: Light Solo
+## Scene 3 Light Solo
 
 DMX control only.
 
@@ -147,7 +147,7 @@ DMX control only.
 
 ---
 
-## Scene 4: Approximation
+## Scene 4 Approximation
 
 Replays joint-driven intensity and pan/tilt data.
 
@@ -181,7 +181,7 @@ May just use DMX.
 
 ---
 
-## Scene 5: Light Forest
+## Scene 5 Light Forest
 
 Rotation mapping per joint.
 
@@ -201,7 +201,7 @@ Rotation mapping per joint.
 
 ---
 
-## Scene 6: The Mound
+## Scene 6 The Mound
 
 Ellipsoids’ size and angle controlled by joint distances/velocities.
 
@@ -241,7 +241,7 @@ For this phase we might just use a cue for custom prescripted behavior.
 
 ---
 
-## Scene 7: Qualities
+## Scene 7 Qualities
 
 No precise movement is required
 
@@ -280,7 +280,7 @@ May go with DMX.
     /scene/activate 7 0
     ```
 ---
-## Scene 8: Puppet
+## Scene 8 Puppet
 
 Follow recorded shoulder, elbow & hand joints.
 
@@ -309,7 +309,7 @@ Follow recorded shoulder, elbow & hand joints.
 
 ---
 
-## Scene 9: Labyrinth
+## Scene 9 Labyrinth
 
 Corridor fade, then full sequence, then spread out.
 
@@ -337,7 +337,7 @@ Corridor fade, then full sequence, then spread out.
 
 ---
 
-## Scene 10: Laser Swarm
+## Scene 10 Laser Swarm
 
 Connected line swarm with dynamic length.
 

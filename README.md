@@ -6,7 +6,7 @@ git submodule add https://github.com/CYENS/premier-laser-show-plugin.git Plugins
 
 A quick reference for Open Sound Control (OSC) messages driving the performance.
 
-  * [Scene 1: Light Painting](#scene-1--light-painting)
+  * [Scene 1: Light Painting](#scene-1-light-painting)
     + [Phase 1: Setup](#phase-1--setup)
   * [Scene 2: Monster](#scene-2--monster)
     + [Phase 1: Monster Cue](#phase-1--monster-cue)

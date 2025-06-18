@@ -64,6 +64,8 @@ void UReembodiedMachineOscHandler::InitializeOsc()
     FOSCDispatchMessageEventBP LightJointAssociateEvent;
     LightJointAssociateEvent.BindDynamic(this, &UReembodiedMachineOscHandler::HandleLightJointAssociate);
     OscServer->BindEventToOnOSCAddressPatternMatchesPath(LightJointAssociatePattern, LightJointAssociateEvent);
+    
+    OscServer->OnOscMessageReceived.AddUniqueDynamic(this, &ThisClass::HandleLiveControlPosition);
 }
 
 void UReembodiedMachineOscHandler::ShutdownOsc()
@@ -170,4 +172,31 @@ void UReembodiedMachineOscHandler::HandleLightJointAssociate(
     TArray<int> Values;
     UOSCManager::GetAllInt32s(Message, Values);
     OnLightJointAssociationReceived.Broadcast(Values);
+}
+
+void UReembodiedMachineOscHandler::HandleLiveControlPosition(const FOSCMessage& Message, const FString& SenderIP, int32 SenderPort)
+{
+    const FOSCAddress& AddressPattern = Message.GetAddress();
+    const FString Path = AddressPattern.GetFullPath();
+
+    TArray<FString> Segments;
+    Path.ParseIntoArray(Segments, TEXT("/"), true);
+
+    if (Segments[0] != "beyond" || Segments[1] != "cue" || Segments[2] != "2" || Segments[4] != "livecontrol")
+    {
+        return;
+    }
+
+    const FString& AxisStr = Segments[5];
+    ELiveControlAxis Axis;
+    if (AxisStr == "posx") Axis = ELiveControlAxis::X;
+    else if (AxisStr == "posy") Axis = ELiveControlAxis::Y;
+    else if (AxisStr == "posz") Axis = ELiveControlAxis::Z;
+    else return;
+
+    const int32 LightIndex = FCString::Atoi(*Segments[4]);
+
+    float Value;
+    UOSCManager::GetFloat(Message, 0, Value);
+    OnLiveControlPositionReceived.Broadcast(LightIndex, Value, Axis);
 }

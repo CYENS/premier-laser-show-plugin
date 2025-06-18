@@ -9,6 +9,14 @@
 #include "OSCMessage.h"
 #include "ReembodiedMachineOscHandler.generated.h"
 
+UENUM(BlueprintType)
+enum class ELiveControlAxis : uint8
+{
+    X UMETA(DisplayName = "X"),
+    Y UMETA(DisplayName = "Y"),
+    Z UMETA(DisplayName = "Z")
+};
+
 // Delegates for incoming OSC events
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnSceneActivate, int32, SceneIndex, int32, PhaseIndex);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnLightIntensitiesReceived, const TArray<float>&, Intensities);
@@ -17,6 +25,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnLightTiltsReceived, const TArray<
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnLightOffsetReceived, const TArray<FVector2f>&, Offsets);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnLaserLinesReceived, const TArray<FVector4f>&, LineData);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnLightJointAssociationReceived, const TArray<int>&, LightJointAssociation);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FOnLiveControlPositionReceived, int32, LightIndex, float, Value, ELiveControlAxis, Axis);
 
 UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
 class PREMIERELASERSHOW_API UReembodiedMachineOscHandler : public UActorComponent
@@ -68,6 +77,9 @@ public:
     
     UPROPERTY(BlueprintAssignable, Category="OSC Events")
     FOnLightJointAssociationReceived OnLightJointAssociationReceived;
+    
+    UPROPERTY(BlueprintAssignable)
+    FOnLiveControlPositionReceived OnLiveControlPositionReceived;
 
 protected:
     void InitializeOsc();
@@ -94,4 +106,7 @@ protected:
     
     UFUNCTION()
     void HandleLightJointAssociate(const FOSCAddress& AddressPattern, const FOSCMessage& Message, const FString& SenderIP, int32 SenderPort);
+    
+    UFUNCTION()
+    void HandleLiveControlPosition(const FOSCMessage& Message, const FString& SenderIP, int32 SenderPort);
 };

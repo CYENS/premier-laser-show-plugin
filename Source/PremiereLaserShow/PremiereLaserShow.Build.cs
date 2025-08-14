@@ -10,6 +10,7 @@ public class PremiereLaserShow : ModuleRules
             new string[]
             {
                 "Core", 
+                "NetCore",
                 "OSC",
             }
         );

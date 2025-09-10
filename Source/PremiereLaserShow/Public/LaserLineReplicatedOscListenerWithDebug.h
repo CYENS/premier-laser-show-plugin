@@ -54,5 +54,7 @@ private:
 
 	/** Draw helpers. */
 	void DrawLines(const TArray<FLaserLineStruct>& Lines) const;
-	void DrawOneLineLocal(const FVector2D& CenterXY, float Length, float RotDeg) const;
+	void DrawOneLineLocal(const FVector2D& CenterXY, const float Length, const float RotDeg) const;
+	void DrawOneLineLocal(const FVector2D& CenterXY, float Length, float RotDeg, float Opacity) const;
+
 };

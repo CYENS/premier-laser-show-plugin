@@ -14,15 +14,16 @@ class ULaserLineUtilsLibrary : public UBlueprintFunctionLibrary
 
 public:
 	UFUNCTION(BlueprintPure, Category="LaserLineStruct", meta=(NativeMakeFunc))
-	static FLaserLineStruct MakeLaserLineStruct(const float X, const float Y, const float Length, const float Rotation) { return FLaserLineStruct::Make(X, Y, Length, Rotation); }
+	static FLaserLineStruct MakeLaserLineStruct(const float X, const float Y, const float Length, const float Rotation, const float Opacity) { return FLaserLineStruct::Make(X, Y, Length, Rotation, Opacity); }
 
 	UFUNCTION(BlueprintPure, Category="LaserLineStruct", meta=(NativeBreakFunc))
-	static void BreakLaserLineStruct(const FLaserLineStruct& InVec, float& X, float& Y, float& Length, float& Rotation)
+	static void BreakLaserLineStruct(const FLaserLineStruct& InVec, float& X, float& Y, float& Length, float& Rotation, float& Opacity)
 	{
 		X = InVec.GetX();
 		Y = InVec.GetY();
 		Length = InVec.GetLength();
 		Rotation = InVec.GetRotation();
+		Opacity = InVec.GetOpacity();
 	}
 	
 	UFUNCTION(BlueprintPure, Category="LaserLineStruct")

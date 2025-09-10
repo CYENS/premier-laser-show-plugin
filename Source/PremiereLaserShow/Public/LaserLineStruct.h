@@ -27,16 +27,24 @@ struct FLaserLineStruct : public FFastArraySerializerItem
 	// W as 16-bit half-float carried as raw bits (so it replicates as exactly 16 bits).
 	// We convert to/from float with FFloat16 helpers in accessors.
 	UPROPERTY() uint16 RotationHalf = 0;
-
+	
+	UPROPERTY() uint8 OpacityByte = 255; // 0=transparent, 255=opaque
+	
 	static FLaserLineStruct Make(const float X, const float Y, const float Length, const float Rotation)
 	{
 		FLaserLineStruct L;
 		L.XYLength = FVector(X, Y, Length);
-		const FFloat16 H = Rotation;
-		L.RotationHalf = H.Encoded;
+		L.SetRotation(Rotation);
 		return L;
 	}
 
+	static FLaserLineStruct Make(const float X, const float Y, const float Length, const float Rotation, const float Opacity)
+	{
+		FLaserLineStruct L = Make(X, Y, Length, Rotation);
+		L.SetOpacity(Opacity);
+		return L;
+	}
+	
 	float GetX() const
 	{
 		return XYLength.X;
@@ -51,7 +59,18 @@ struct FLaserLineStruct : public FFastArraySerializerItem
 	{
 		return XYLength.Z;
 	}
-
+	
+	float GetOpacity() const
+	{
+		return static_cast<float>(OpacityByte) / 255.0f;
+	}
+	
+	void SetOpacity(const float Opacity)
+	{
+		const float Clamped = FMath::Clamp(Opacity, 0.0f, 1.0f);
+		OpacityByte = static_cast<uint8>(FMath::RoundToInt(Clamped * 255.0f));
+	}
+	
 	float GetRotation() const
 	{
 		FFloat16 H;
@@ -59,9 +78,15 @@ struct FLaserLineStruct : public FFastArraySerializerItem
 		return H;
 	}
 	
+	void SetRotation(const float Rotation)
+	{
+		const FFloat16 H = Rotation;
+		RotationHalf = H.Encoded;
+	}
+
 	FString ToString() const
 	{
-		return FString::Printf(TEXT("LaserLineStruct(X: %.2f, Y: %.2f, Length: %.2f, Rotation: %.2f)"), GetX(), GetY(), GetLength(), GetRotation());
+		return FString::Printf(TEXT("LaserLineStruct(X: %.2f, Y: %.2f, Length: %.2f, Rotation: %.1f°, Opacity: %.2f)"), GetX(), GetY(), GetLength(), GetRotation(), GetOpacity());
 	}
 };
 
@@ -98,6 +123,7 @@ struct FLaserLineArray : public FFastArraySerializer
 	{
 
 		FString DebugString;
+		DebugString.Reserve(128 + Lines.Num() * 64);
 		DebugString += FString::Printf(TEXT("NumLines: %d\n"), Lines.Num());
 		int i = 0;
 		for (const FLaserLineStruct& Line : Lines)

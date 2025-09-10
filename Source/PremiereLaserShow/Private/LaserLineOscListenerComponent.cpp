@@ -18,9 +18,18 @@ void ULaserLineOscListenerComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
+
+	
 	const ENetMode NetMode = GetNetMode();
-	const bool bShouldStartListeningToOsc = NetMode == NM_Standalone || NetMode == NM_DedicatedServer || GetOwner()->HasAuthority() && (!bOscOnListenServerOnly || NetMode == NM_ListenServer);
-	if (!bShouldStartListeningToOsc)
+	const AActor* Owner = GetOwner();
+	const bool bServerOrStandalone =
+		NetMode == NM_Standalone || NetMode == NM_DedicatedServer ||
+		(NetMode == NM_ListenServer && Owner && Owner->HasAuthority());
+
+	if (
+		const bool bShouldStartListeningToOsc = bServerOrStandalone && (!bOscOnListenServerOnly || NetMode == NM_ListenServer);
+		!bShouldStartListeningToOsc
+	)
 	{
 		return;
 	}
@@ -61,24 +70,29 @@ void ULaserLineOscListenerComponent::EndPlay(const EEndPlayReason::Type EndPlayR
 void ULaserLineOscListenerComponent::OnOscLaserLine(const FOSCAddress& AddressPattern, const FOSCMessage& Message, const FString& SenderIP, int32 SenderPort)
 {
 	TArray<float> Values;
-	constexpr int32 ExpectedNumValues = 64;
 	UOSCManager::GetAllFloats(Message, Values);
-	if (Values.Num() != ExpectedNumValues)
+
+	constexpr int32 Stride = 5; // X, Y, Length, Rotation, Opacity
+	if (
+		const int32 ExpectedNumValues = NumLines * Stride;
+		Values.Num() != ExpectedNumValues
+	)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("OSC /laser/line expected 16 args, got %d"), Values.Num());
+		UE_LOG(LogPremiereLaserShow, Warning, TEXT("OSC /laser/line expected %d args, got %d"), ExpectedNumValues, Values.Num());
 		return;
 	}
 
 	for (int32 i = 0; i < NumLines; ++i)
 	{
-		const int32 Base = i * 4;
+		const int32 Base = i * Stride;
 		const float X       = Values[Base + 0];
 		const float Y       = Values[Base + 1];
 		const float Length  = Values[Base + 2];
 		const float Rotation= Values[Base + 3];
+		const float Opacity = Values[Base + 4];
 
 		FLaserLineStruct& Item = LaserLineArray.LaserLines[i];
-		Item = FLaserLineStruct::Make(X, Y, Length, Rotation);
+		Item = FLaserLineStruct::Make(X, Y, Length, Rotation, Opacity);
 	}
 	
 	LinesView = LaserLineArray.LaserLines;
